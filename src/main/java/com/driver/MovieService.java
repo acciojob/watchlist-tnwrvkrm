@@ -19,12 +19,18 @@ public class MovieService {
     //1
     public ResponseEntity<String> addMovie(Movie movie){
         movieRepository.getMovieMap().put(movie.getName(), movie);
+//        for(String name: movieRepository.getMovieMap().keySet()){
+//            System.out.println(name);
+//        }
         return new ResponseEntity<>("New Movie Added Successfully", HttpStatus.CREATED);
     }
 
     //2
     public ResponseEntity<String> addDirector(Director director){
         movieRepository.getDirectorMap().put(director.getName(), director);
+//        for(String name: movieRepository.getDirectorMap().keySet()){
+//            System.out.println(name);
+//        }
         return new ResponseEntity<>("New Director Added Successfully", HttpStatus.CREATED);
     }
 
@@ -39,12 +45,16 @@ public class MovieService {
 
         movieRepository.getDirectorMovieMap().get(directorName).add(movieName);
 
+//        for(String name: movieRepository.getDirectorMovieMap().keySet()){
+//            System.out.println(name);
+//        }
+
         return new ResponseEntity<>("Movie mapped to director", HttpStatus.CREATED);
     }
 
     //4
-    public ResponseEntity<Director> getMovieByName(String directorName){
-        return new ResponseEntity<>(movieRepository.getDirectorMap().get(directorName), HttpStatus.FOUND);
+    public ResponseEntity<Movie> getMovieByName(String movieName){
+        return new ResponseEntity<>(movieRepository.getMovieMap().get(movieName), HttpStatus.FOUND);
     }
 
     //5
@@ -64,11 +74,15 @@ public class MovieService {
 
     //8
     public ResponseEntity<String> deleteDirectorByName(String directorName){
-        for (String movieName : movieRepository.getDirectorMovieMap().get(directorName)){
-            movieRepository.getMovieMap().remove(movieName);
+        if(movieRepository.getDirectorMap().containsKey(directorName)) {
+            if (movieRepository.getDirectorMovieMap().containsKey(directorName)) {
+                for (String movieName : movieRepository.getDirectorMovieMap().get(directorName)) {
+                    movieRepository.getMovieMap().remove(movieName);
+                }
+                movieRepository.getDirectorMovieMap().remove(directorName);
+            }
+            movieRepository.getDirectorMap().remove(directorName);
         }
-        movieRepository.getDirectorMap().remove(directorName);
-        movieRepository.getDirectorMovieMap().remove(directorName);
 
         return new ResponseEntity<>("Data Deleted Successfully", HttpStatus.OK);
     }
@@ -76,8 +90,10 @@ public class MovieService {
     //9
     public ResponseEntity<String> deleteAllDirectors(){
         for(String directorName: movieRepository.getDirectorMap().keySet()) {
-            for (String movieName : movieRepository.getDirectorMovieMap().get(directorName)) {
-                movieRepository.getMovieMap().remove(movieName);
+            if(movieRepository.getDirectorMovieMap().containsKey(directorName)) {
+                for (String movieName : movieRepository.getDirectorMovieMap().get(directorName)) {
+                    movieRepository.getMovieMap().remove(movieName);
+                }
             }
         }
 

@@ -30,26 +30,27 @@ public class MovieController {
     }
 
     //3
-    @PostMapping("add-movie-director-pair")
+    @PutMapping("add-movie-director-pair")
     public ResponseEntity<String> addMovieDirectorPair(@RequestParam("movie") String movieName, @RequestParam("director") String directorName){
         return movieService.addMovieDirectorPair(movieName, directorName);
     }
 
     //4
-    @GetMapping("get-movie-by-name/{name}")
-    public ResponseEntity<Director> getMovieByName(@PathVariable String directorName){
-        return movieService.getMovieByName(directorName);
+    @GetMapping("/get-movie-by-name/{name}")
+    //@ResponseBody
+    public ResponseEntity<Movie> getMovieByName(@PathVariable("name") String movieName){
+        return movieService.getMovieByName(movieName);
     }
 
     //5
-    @GetMapping("get-director-by-name/{name}")
-    public ResponseEntity<Director> getDirectorByName(@PathVariable String directorName){
+    @GetMapping("/get-director-by-name/{name}")
+    public ResponseEntity<Director> getDirectorByName(@PathVariable("name") String directorName){
         return movieService.getDirectorByName(directorName);
     }
 
     //6
-    @GetMapping("get-movies-by-director-name/{director}")
-    public ResponseEntity<List<String>> getMoviesByDirectorName(@PathVariable String directorName){
+    @GetMapping("/get-movies-by-director-name/{director}")
+    public ResponseEntity<List<String>> getMoviesByDirectorName(@PathVariable("director") String directorName){
         return movieService.getMoviesByDirectorName(directorName);
     }
 
@@ -61,7 +62,7 @@ public class MovieController {
 
     //8
     @DeleteMapping("delete-director-by-name")
-    public ResponseEntity<String> deleteDirectorByName(@RequestParam String directorName){
+    public ResponseEntity<String> deleteDirectorByName(@RequestParam() String directorName){
         return movieService.deleteDirectorByName(directorName);
     }
 
